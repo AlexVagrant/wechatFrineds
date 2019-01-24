@@ -82,10 +82,21 @@ class Wechat(object):
         Province_Dict = self.Province_Dict
         province_attr = list(Province_Dict.keys())
         province_value = list(Province_Dict.values())
-        print(province_attr,province_value)
+        pie = Pie('全国地图示例')
+        pie.add('', province_attr, province_value, is_label_show=True)
+        pie.render('./pie.png')
+        # 地图
         map = Map("全国地图示例", width=1200, height=600)
-        map.add("", province_attr, province_value, maptype='china', is_label_show=True)
-        map.render()
+        map.add(
+            "",
+            province_attr,
+            province_value,
+            maptype='china',
+            is_label_show=True,
+            is_visualmap=True,
+            visual_text_color="#000"
+        )
+        map.render('./map.png')
 
 
 if __name__ == '__main__':
