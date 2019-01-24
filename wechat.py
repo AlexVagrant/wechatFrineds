@@ -1,7 +1,7 @@
 import itchat
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
-from pyecharts import Pie
+from pyecharts import Pie, Map
 from utils import is_chinese
 
 def get_attr(friends, key):
@@ -18,9 +18,11 @@ class Wechat(object):
         }
         self.Signature = []
         self.Province = []
+        self.Province_Dict = {
+        }
         self.itchatDef()
         self.echars()
-
+        self.map()
     def itchatDef(self):
         itchat.auto_login(hotReload=True)
         friends = itchat.get_friends()[1:]
@@ -31,7 +33,16 @@ class Wechat(object):
 
             if not Province:
                 self.Province.append('其他')
+                if '其他' in self.Province_Dict:
+                    self.Province_Dict['其他'] += 1
+                else:
+                    self.Province_Dict['其他'] = 1
             elif is_chinese(Province):
+                if Province in self.Province_Dict:
+                    self.Province_Dict[Province] += 1
+                else:
+                    self.Province_Dict[Province] = 1
+
                 self.Province.append(Province)
 
             if Signature and Signature.find("span") == -1:
@@ -66,7 +77,15 @@ class Wechat(object):
         value = [sex['man'],sex['woman'],sex['other']]
         pie = Pie('男女比例图')
         pie.add('', attr, value, is_label_show=True)
-        pie.render()
+        # pie.render()
+    def map(self):
+        Province_Dict = self.Province_Dict
+        province_attr = list(Province_Dict.keys())
+        province_value = list(Province_Dict.values())
+        print(province_attr,province_value)
+        map = Map("全国地图示例", width=1200, height=600)
+        map.add("", province_attr, province_value, maptype='china', is_label_show=True)
+        map.render()
 
 
 if __name__ == '__main__':
