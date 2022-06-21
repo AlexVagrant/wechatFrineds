@@ -18,7 +18,7 @@ macropy3==1.1.0b2
 MarkupSafe==1.1.0
 matplotlib==3.0.2
 mccabe==0.6.1
-numpy==1.16.0
+numpy==1.22.0
 Pillow==5.4.1
 pyecharts==0.5.11
 pyecharts-javascripthon==0.0.6
